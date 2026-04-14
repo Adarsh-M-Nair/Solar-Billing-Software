@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Quotation - {{ quotation.quotation_number }}</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 4.5cm 1.5cm 2cm 1.5cm;
+
+            @frame header_frame {
+                -pdf-frame-content: header_content;
+                left: 1.5cm;
+                top: 1cm;
+                right: 1.5cm;
+                height: 3.5cm;
+            }
+
+            @frame footer_frame {
+                -pdf-frame-content: footer_content;
+                left: 1.5cm;
+                right: 1.5cm;
+                bottom: 0.5cm;
+                height: 1.5cm;
+            }
+        }
+
+        body {
+            font-family: Helvetica, sans-serif;
+            font-size: 13px;
+            color: #000;
+        }
+
+        .company-name {
+            font-size: 38px;
+            font-weight: bold;
+            color: #b91c1c;
+            font-style: italic;
+            letter-spacing: -1px;
+        }
+
+        .company-sub {
+            font-size: 22px;
+            font-weight: bold;
+            color: #b91c1c;
+        }
+
+        .tagline {
+            font-size: 11px;
+            font-style: italic;
+            font-weight: bold;
+            color: #000;
+            margin-top: 5px;
+            display: block;
+        }
+
+        .address {
+            font-size: 13px;
+            line-height: 1.5;
+            margin-top: 8px;
+            font-weight: bold;
+            color: #111;
+        }
+
+        .badge-table {
+            border: 2px solid #2563eb;
+            width: 100px;
+            text-align: center;
+            border-radius: 8px;
+            background-color: #f8fafc;
+        }
+
+        .badge-number {
+            font-size: 42px;
+            font-weight: bold;
+            color: #000;
+            line-height: 1;
+            padding-top: 5px;
+        }
+
+        .badge-text {
+            font-size: 14px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #2563eb;
+            padding: 4px;
+        }
+
+        .red-divider {
+            background-color: #ef4444;
+            color: #fff;
+            text-align: right;
+            font-style: italic;
+            font-size: 12px;
+            padding: 4px 15px;
+            font-weight: bold;
+            border-radius: 20px;
+            margin-top: 10px;
+        }
+
+        h2.title {
+            text-align: center;
+            text-decoration: underline;
+            font-size: 18px;
+            margin: 15px 0 25px 0;
+        }
+
+        table.quotation-info {
+            width: 100%;
+            margin-bottom: 20px;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        table.items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table.items-table th,
+        table.items-table td {
+            border: 1px solid #000;
+            padding: 12px;
+        }
+
+        table.items-table th {
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        td.sl-no {
+            width: 10%;
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        td.item-desc {
+            width: 65%;
+            font-size: 15px;
+            line-height: 1.4;
+        }
+
+        td.price {
+            width: 25%;
+            text-align: right;
+            font-weight: bold;
+            font-size: 16px;
+            vertical-align: middle;
+        }
+
+        .subsidy-box {
+            border: 1px solid #000;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .subsidy-title {
+            font-size: 24px;
+            font-weight: bold;
+            font-style: italic;
+            color: #1e293b;
+            margin-bottom: 15px;
+        }
+
+        .subsidy-title-left {
+            text-decoration: underline;
+            color: #b91c1c;
+        }
+
+        .subsidy-text {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #b91c1c;
+            font-weight: bold;
+        }
+
+        .subsidy-amount {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .terms-header {
+            text-decoration: underline;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+
+        ul.terms {
+            margin: 0;
+            padding-left: 20px;
+            font-size: 15px;
+            line-height: 1.8;
+            font-family: Helvetica, sans-serif;
+        }
+
+        ul.terms li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header_content">
+        <table style="width: 100%;">
+            <tr>
+                <td style="width: 75%; vertical-align: bottom;">
+                    <span class="company-name">Vaikhary</span> <span class="company-sub">SOLAR</span><br>
+                    <span class="tagline">Best Quality & Best Service</span>
+                    <div class="address">
+                        {{ company_address }}<br>
+                        Email : {{ company_email }}
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+    <div id="footer_content">
+        <div style="border-top: 1px solid #000; padding-top: 5px; font-size: 10px; text-align: center;">
+            Thank you for choosing {{ company_name }}. Quotation Date: {{ quotation.date_issued|date:"d/m/Y" }}
+        </div>
+    </div>
+
+    <!-- Main Content -->
+
+    <table class="quotation-info">
+        <tr>
+            <td style="width: 60%;">Quote To: <span style="text-decoration: underline;">{{ quotation.customer.name
+                    }}</span></td>
+            <td style="width: 40%; text-align: right;">Quotation No: {{ quotation.quotation_number }}</td>
+        </tr>
+    </table>
+
+    <h2 class="title">SOLAR POWER SYSTEM DETAILS</h2>
+
+    <table class="items-table">
+        <thead>
+            <tr>
+                <th>SL No</th>
+                <th>ITEM</th>
+                <th>PRICE (Rs.)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in quotation.items.all %}
+            <tr>
+                <td class="sl-no">{{ forloop.counter|stringformat:"02d" }}</td>
+                <td class="item-desc">
+                    {{ item.product.name }}
+                    {% if item.product.description %}
+                    <br><span style="font-size: 13px; color: #555;">{{ item.product.description }}</span>
+                    {% endif %}
+                </td>
+                <td class="price">{{ item.total_amount }}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="2" style="text-align: right; font-weight: bold; font-size: 18px; padding: 15px;">TOTAL
+                    AMOUNT (Inc. Taxes)</td>
+                <td class="price" style="font-size: 20px;">{{ quotation.grand_total }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="subsidy-box">
+        <div class="subsidy-title"><span class="subsidy-title-left">Subsidy</span> Quality & Best Service</div>
+        <table style="width: 100%;">
+            <tr>
+                <td style="width: 75%;">
+                    <div class="subsidy-text">
+                        Customer Should be paid total amount, all paper works for PM Surya Ghar Yojana subsidy is done
+                        by Vaikhary Solar Systems. Customer will get the subsidy amount on their Bank Account. That will
+                        be given by Govt of India.
+                    </div>
+                </td>
+                <td style="width: 25%; text-align: right; vertical-align: top;">
+                    <div class="subsidy-amount">78,000.00/-</div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div style="page-break-before: always;"></div>
+
+    <div class="terms-header">TERMS AND CONDITIONS</div>
+    <ul class="terms">
+        <li>The price quoted in the price list are inclusive all taxes</li>
+        <li>Delivery Within 15 days from the date of receipt your order</li>
+        <li>Offer valid 30 days from the date of quotation</li>
+        <li>Warranty On Grid Inverter (5 to 10 years of manufacturer warranty) PV Module 10 years of Manufacturer
+            warranty (25 years performance warranty)</li>
+        <li>Daily Energy production should be depending up on the availability of the sun light and maintaining of the
+            PV Modules.</li>
+        <li>A room properly ventilated and protected from rain should be provided to install The Inverter, AC and DC DB
+            etc</li>
+        <li>On-Grid Power plant having capacity 10 KW and above requires approval from the Electrical Inspectorate, the
+            cost of getting approval met by the Customer</li>
+        <li>Customer will have to store the goods and materials once delivered, in a safe place at costumer's
+            responsibility.</li>
+        <li>Loading and Unloading related issue if any at the site during material delivery to be settled by customer
+            side.</li>
+        <li>In case of delay in receiving the Net Meter from KSEB additional amount will be charged Rs: 5500 for Single
+            Phase and Rs: 9500 for three Phase</li>
+        <li>10% Advance payment for KSEB feasibility and related documentation</li>
+        <li>80% After the installation of the solar power plant</li>
+        <li>10% After completion of the entire project including KSEB Sanction</li>
+        <li>KSEB Registration fee is to be paid by the Consumer and the 80% of the amount Will be refunded by KSEB.</li>
+        <li>Central Government subsidy scheme (PM-Surya Ghar: Muft Bijili Yojana) Rs 78000/-, After the project
+            completion approval from KSEB the subsidy amount will be credited to the customers bank account within 30
+            working days.</li>
+    </ul>
+
+</body>
+
+</html>
