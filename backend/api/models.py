@@ -2,7 +2,7 @@ from django.db import models
 
 class Customer(models.Model):
     name = models.CharField(max_length=255)
-    gstin = models.CharField(max_length=15, blank=True, null=True)
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
     address = models.TextField()
     state = models.CharField(max_length=100) # To check if inter-state or intra-state
     created_at = models.DateTimeField(auto_now_add=True)

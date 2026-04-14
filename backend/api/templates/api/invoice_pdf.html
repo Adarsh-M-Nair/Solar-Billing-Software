@@ -190,8 +190,8 @@
                     {{ invoice.customer.state }}<br>
                     India
                 </div>
-                {% if invoice.customer.gstin %}
-                <div class="font-bold" style="margin-top: 8px;">GSTIN: {{ invoice.customer.gstin }}</div>
+                {% if invoice.customer.phone_number %}
+                <div class="font-bold" style="margin-top: 8px;">Phone: {{ invoice.customer.phone_number }}</div>
                 {% endif %}
             </td>
             <td>
@@ -201,8 +201,8 @@
                     {{ invoice.customer.state }}<br>
                     India
                 </div>
-                {% if invoice.customer.gstin %}
-                <div class="font-bold" style="margin-top: 8px;">GSTIN: {{ invoice.customer.gstin }}</div>
+                {% if invoice.customer.phone_number %}
+                <div class="font-bold" style="margin-top: 8px;">Phone: {{ invoice.customer.phone_number }}</div>
                 {% endif %}
             </td>
         </tr>
