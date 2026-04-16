@@ -70,27 +70,32 @@ class InvoiceSerializer(serializers.ModelSerializer):
         for item_data in items_data:
             product = item_data['product']
             quantity = item_data['quantity']
-            unit_price = item_data['unit_price']
+            entered_unit_price = float(item_data['unit_price'])
+            gst_rate = float(product.gst_rate)
             
-            line_subtotal = float(unit_price) * quantity
+            # Input unit_price is inclusive of GST
+            line_total = entered_unit_price * quantity
+            line_subtotal = line_total / (1 + gst_rate / 100)
+            line_tax_total = line_total - line_subtotal
+            
+            # Base unit price for the "Rate" column in Invoice
+            unit_price_base = line_subtotal / quantity
             
             line_cgst = 0
             line_sgst = 0
             line_igst = 0
             
             if is_interstate:
-                line_igst = line_subtotal * 0.18
+                line_igst = line_tax_total
             else:
-                line_cgst = line_subtotal * 0.09
-                line_sgst = line_subtotal * 0.09
+                line_cgst = line_tax_total / 2
+                line_sgst = line_tax_total / 2
                 
-            line_total = line_subtotal + line_cgst + line_sgst + line_igst
-            
             InvoiceItem.objects.create(
                 invoice=invoice,
                 product=product,
                 quantity=quantity,
-                unit_price=unit_price,
+                unit_price=unit_price_base,
                 cgst=line_cgst,
                 sgst=line_sgst,
                 igst=line_igst,
@@ -144,17 +149,22 @@ class QuotationSerializer(serializers.ModelSerializer):
         for item_data in items_data:
             product = item_data['product']
             quantity = item_data['quantity']
-            unit_price = item_data['unit_price']
+            entered_unit_price = float(item_data['unit_price'])
+            gst_rate = float(product.gst_rate)
             
-            line_subtotal = float(unit_price) * quantity
-            line_tax = line_subtotal * 0.18
-            line_total = line_subtotal + line_tax
+            # Input unit_price is inclusive of GST
+            line_total = entered_unit_price * quantity
+            line_subtotal = line_total / (1 + gst_rate / 100)
+            line_tax = line_total - line_subtotal
+            
+            # Base unit price
+            unit_price_base = line_subtotal / quantity
             
             QuotationItem.objects.create(
                 quotation=quotation,
                 product=product,
                 quantity=quantity,
-                unit_price=unit_price,
+                unit_price=unit_price_base,
                 total_amount=line_total
             )
             

@@ -55,6 +55,14 @@ class InvoiceItem(models.Model):
     igst = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     total_amount = models.DecimalField(max_digits=12, decimal_places=2)
 
+    @property
+    def cgst_rate(self):
+        return self.product.gst_rate / 2
+
+    @property
+    def sgst_rate(self):
+        return self.product.gst_rate / 2
+
 class Quotation(models.Model):
     quotation_number = models.CharField(max_length=50, unique=True)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)

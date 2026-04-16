@@ -157,44 +157,26 @@
     <!-- SECTION 2: INVOICE INFO -->
     <table class="grid-table" style="border-bottom: none;">
         <tr>
-            <td style="width: 20%;" class="font-bold">Invoice #</td>
-            <td style="width: 30%;">: {{ invoice.invoice_number }}</td>
-            <td style="width: 20%;" class="font-bold">Place Of Supply</td>
-            <td style="width: 30%;">: {{ invoice.customer.state }}</td>
+            <td style="width: 25%;" class="font-bold">Invoice #</td>
+            <td style="width: 75%;">: {{ invoice.invoice_number }}</td>
         </tr>
         <tr>
             <td class="font-bold">Terms</td>
             <td>: Due on Receipt</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td class="font-bold">Due Date</td>
             <td>: {{ invoice.date_issued|date:"d/m/Y" }}</td>
-            <td></td>
-            <td></td>
         </tr>
     </table>
 
     <!-- SECTION 3: PARTIES -->
     <table class="grid-table" style="border-bottom: none;">
         <tr>
-            <td style="width: 50%;" class="header-bg">Bill To</td>
-            <td style="width: 50%;" class="header-bg">Ship To</td>
+            <td class="header-bg">Customer Details</td>
         </tr>
         <tr>
             <td style="height: 100px;">
-                <div class="font-bold mid-text">{{ invoice.customer.name }}</div>
-                <div class="mid-text" style="margin-top: 4px;">
-                    {{ invoice.customer.address }}<br>
-                    {{ invoice.customer.state }}<br>
-                    India
-                </div>
-                {% if invoice.customer.phone_number %}
-                <div class="font-bold" style="margin-top: 8px;">Phone: {{ invoice.customer.phone_number }}</div>
-                {% endif %}
-            </td>
-            <td>
                 <div class="font-bold mid-text">{{ invoice.customer.name }}</div>
                 <div class="mid-text" style="margin-top: 4px;">
                     {{ invoice.customer.address }}<br>
@@ -242,9 +224,9 @@
                 <td class="text-center">{{ item.quantity }}<br>pcs</td>
                 <td>{{ item.unit_price }}</td>
 
-                <td class="text-center">{% if invoice.igst_total > 0 %}-{% else %}9%{% endif %}</td>
+                <td class="text-center">{% if invoice.igst_total > 0 %}-{% else %}{{ item.cgst_rate }}%{% endif %}</td>
                 <td>{% if invoice.igst_total > 0 %}0.00{% else %}{{ item.cgst }}{% endif %}</td>
-                <td class="text-center">{% if invoice.igst_total > 0 %}-{% else %}9%{% endif %}</td>
+                <td class="text-center">{% if invoice.igst_total > 0 %}-{% else %}{{ item.sgst_rate }}%{% endif %}</td>
                 <td>{% if invoice.igst_total > 0 %}0.00{% else %}{{ item.sgst }}{% endif %}</td>
 
                 <td>{{ item.total_amount }}</td>
@@ -287,7 +269,7 @@
                         </tr>
                         <tr>
                             <td class="font-bold">Account name</td>
-                            <td>: VAIKHARY SOLAR SOLUTIONS</td>
+                            <td>: VAIKHARY SOLAR</td>
                         </tr>
                         <tr>
                             <td class="font-bold">Account number</td>
@@ -316,18 +298,18 @@
 
                     {% if invoice.cgst_total > 0 %}
                     <tr>
-                        <td>CGST (9%)</td>
+                        <td>CGST</td>
                         <td>{{ invoice.cgst_total }}</td>
                     </tr>
                     <tr>
-                        <td>SGST (9%)</td>
+                        <td>SGST</td>
                         <td>{{ invoice.sgst_total }}</td>
                     </tr>
                     {% endif %}
 
                     {% if invoice.igst_total > 0 %}
                     <tr>
-                        <td>IGST (18%)</td>
+                        <td>IGST</td>
                         <td>{{ invoice.igst_total }}</td>
                     </tr>
                     {% endif %}

@@ -89,20 +89,21 @@ const Products = () => {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">Product Name *</label>
-                <input required type="text" className="input-field" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} placeholder="e.g. 330W Mono Panel" />
+                <input required type="text" className="input-field" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} placeholder="e.g. 330W Mono Panel" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">Description</label>
-                <input type="text" className="input-field" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} />
+                <input type="text" className="input-field" value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">Unit Price (Rs.) *</label>
-                  <input required type="number" step="0.01" className="input-field" value={formData.unit_price} onChange={e => setFormData({...formData, unit_price: e.target.value})} />
+                  <input required type="number" step="0.01" className="input-field" value={formData.unit_price} onChange={e => setFormData({ ...formData, unit_price: e.target.value })} />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">GST Rate (%) *</label>
-                  <select className="input-field" value={formData.gst_rate} onChange={e => setFormData({...formData, gst_rate: e.target.value})}>
+                  <select className="input-field" value={formData.gst_rate} onChange={e => setFormData({ ...formData, gst_rate: e.target.value })}>
+                    <option value="0.00">0%</option>
                     <option value="5.00">5%</option>
                     <option value="12.00">12%</option>
                     <option value="18.00">18%</option>

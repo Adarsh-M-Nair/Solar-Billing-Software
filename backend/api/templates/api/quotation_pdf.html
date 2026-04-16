@@ -203,6 +203,25 @@
         ul.terms li {
             margin-bottom: 8px;
         }
+
+        .no-border-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .no-border-table td {
+            border: none;
+            padding: 2px;
+        }
+
+        .font-bold {
+            font-weight: bold;
+        }
+
+        .mid-text {
+            font-size: 11px;
+            line-height: 1.4;
+        }
     </style>
 </head>
 
@@ -233,8 +252,7 @@
 
     <table class="quotation-info">
         <tr>
-            <td style="width: 60%;">Quote To: <span style="text-decoration: underline;">{{ quotation.customer.name
-                    }}</span></td>
+            <td style="width: 60%;">Quote To: <span style="text-decoration: underline;">{{ quotation.customer.name }}</span></td>
             <td style="width: 40%; text-align: right;">Quotation No: {{ quotation.quotation_number }}</td>
         </tr>
     </table>
@@ -317,6 +335,28 @@
             completion approval from KSEB the subsidy amount will be credited to the customers bank account within 30
             working days.</li>
     </ul>
+
+    <div class="mid-text" style="margin-top: 30px; margin-left: 20px;">
+        <div class="font-bold" style="text-decoration: underline; margin-bottom: 10px;">Bank Account Details:</div>
+        <table class="no-border-table">
+            <tr>
+                <td width="30%" class="font-bold">Bank Name, Branch</td>
+                <td width="70%">: Indian Overseas Bank, Chengannur</td>
+            </tr>
+            <tr>
+                <td class="font-bold">Account name</td>
+                <td>: VAIKHARY SOLAR</td>
+            </tr>
+            <tr>
+                <td class="font-bold">Account number</td>
+                <td>: 058802000001617</td>
+            </tr>
+            <tr>
+                <td class="font-bold">IFSC Code</td>
+                <td>: IOBA0000588</td>
+            </tr>
+        </table>
+    </div>
 
 </body>
 
