@@ -88,6 +88,17 @@
             line-height: 1.4;
         }
 
+        .customer-name {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .customer-details {
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
         .totals-grid td {
             border: none;
             padding: 6px 12px;
@@ -177,14 +188,14 @@
         </tr>
         <tr>
             <td style="height: 100px;">
-                <div class="font-bold mid-text">{{ invoice.customer.name }}</div>
-                <div class="mid-text" style="margin-top: 4px;">
+                <div class="customer-name">{{ invoice.customer.name }}</div>
+                <div class="customer-details" style="margin-top: 4px;">
                     {{ invoice.customer.address }}<br>
                     {{ invoice.customer.state }}<br>
                     India
                 </div>
                 {% if invoice.customer.phone_number %}
-                <div class="font-bold" style="margin-top: 8px;">Phone: {{ invoice.customer.phone_number }}</div>
+                <div class="font-bold" style="font-size: 13px; margin-top: 8px;">Phone: {{ invoice.customer.phone_number }}</div>
                 {% endif %}
             </td>
         </tr>
@@ -195,19 +206,19 @@
         <thead>
             <tr>
                 <th rowspan="2" style="width: 3%;">#</th>
-                <th rowspan="2" style="width: 32%;">Item &amp; Description</th>
-                <th rowspan="2" style="width: 10%;">HSN<br>/SAC</th>
+                <th rowspan="2" style="width: 25%;">Item &amp; Description</th>
+                <th rowspan="2" style="width: 8%;">HSN<br>/SAC</th>
                 <th rowspan="2" style="width: 5%;">Qty</th>
                 <th rowspan="2" style="width: 10%;">Rate</th>
-                <th colspan="2" style="width: 12%;">CGST</th>
-                <th colspan="2" style="width: 12%;">SGST</th>
+                <th colspan="2" style="width: 16.5%;">CGST</th>
+                <th colspan="2" style="width: 16.5%;">SGST</th>
                 <th rowspan="2" style="width: 16%;">Amount</th>
             </tr>
             <tr>
-                <th>%</th>
-                <th>Amt</th>
-                <th>%</th>
-                <th>Amt</th>
+                <th style="width: 5.5%;">%</th>
+                <th style="width: 11%;">Amt</th>
+                <th style="width: 5.5%;">%</th>
+                <th style="width: 11%;">Amt</th>
             </tr>
         </thead>
         <tbody>

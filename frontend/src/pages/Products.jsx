@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api';
-import { Plus, PackageSearch, Tag } from 'lucide-react';
+import { Plus, PackageSearch, Tag, Pencil } from 'lucide-react';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editId, setEditId] = useState(null);
   const [formData, setFormData] = useState({ name: '', description: '', unit_price: '', gst_rate: '12.00' });
 
   const fetchProducts = async () => {
@@ -23,14 +25,36 @@ const Products = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.post('products/', formData);
-      setFormData({ name: '', description: '', unit_price: '', gst_rate: '12.00' });
-      setIsModalOpen(false);
+      if (isEditMode) {
+        await api.put(`products/${editId}/`, formData);
+      } else {
+        await api.post('products/', formData);
+      }
+      handleCloseModal();
       fetchProducts();
     } catch (e) {
       console.error(e);
-      alert("Error adding product.");
+      alert(`Error ${isEditMode ? 'updating' : 'adding'} product.`);
     }
+  };
+
+  const handleEditClick = (product) => {
+    setFormData({
+      name: product.name,
+      description: product.description || '',
+      unit_price: product.unit_price,
+      gst_rate: product.gst_rate
+    });
+    setEditId(product.id);
+    setIsEditMode(true);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setIsEditMode(false);
+    setEditId(null);
+    setFormData({ name: '', description: '', unit_price: '', gst_rate: '12.00' });
   };
 
   return (
@@ -56,6 +80,7 @@ const Products = () => {
                 <th className="table-header">Description</th>
                 <th className="table-header">Unit Price (Rs.)</th>
                 <th className="table-header">GST Rate</th>
+                <th className="table-header text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -74,6 +99,15 @@ const Products = () => {
                         <Tag className="w-3 h-3" /> {Number(p.gst_rate)}%
                       </span>
                     </td>
+                    <td className="table-cell text-right">
+                      <button 
+                        onClick={() => handleEditClick(p)}
+                        className="p-1.5 text-slate-400 hover:text-emerald-500 hover:bg-emerald-50 rounded-md transition-colors"
+                        title="Edit Product"
+                      >
+                        <Pencil className="w-4 h-4" />
+                      </button>
+                    </td>
                   </tr>
                 ))
               )}
@@ -85,7 +119,9 @@ const Products = () => {
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/20 backdrop-blur-sm animate-in fade-in">
           <div className="glass-panel w-full max-w-md p-6 animate-in slide-in-from-bottom-8">
-            <h2 className="text-2xl font-bold mb-6 text-slate-800">Add New Product</h2>
+            <h2 className="text-2xl font-bold mb-6 text-slate-800">
+              {isEditMode ? 'Edit Product' : 'Add New Product'}
+            </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">Product Name *</label>
@@ -112,8 +148,10 @@ const Products = () => {
                 </div>
               </div>
               <div className="flex gap-3 justify-end mt-8">
-                <button type="button" onClick={() => setIsModalOpen(false)} className="btn-secondary">Cancel</button>
-                <button type="submit" className="btn-primary">Save Product</button>
+                <button type="button" onClick={handleCloseModal} className="btn-secondary">Cancel</button>
+                <button type="submit" className="btn-primary">
+                  {isEditMode ? 'Update Product' : 'Save Product'}
+                </button>
               </div>
             </form>
           </div>
