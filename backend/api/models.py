@@ -35,7 +35,7 @@ class PackageItem(models.Model):
 class Invoice(models.Model):
     invoice_number = models.CharField(max_length=50, unique=True)
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
-    date_issued = models.DateField(auto_now_add=True)
+    date_issued = models.DateTimeField(auto_now_add=True)
     subtotal = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     cgst_total = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     sgst_total = models.DecimalField(max_digits=12, decimal_places=2, default=0)
@@ -66,7 +66,7 @@ class InvoiceItem(models.Model):
 class Quotation(models.Model):
     quotation_number = models.CharField(max_length=50, unique=True)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    date_issued = models.DateField(auto_now_add=True)
+    date_issued = models.DateTimeField(auto_now_add=True)
     subtotal = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     tax_total = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     grand_total = models.DecimalField(max_digits=12, decimal_places=2, default=0)

@@ -107,7 +107,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 COMPANY_NAME = "Vaikhary Solar"
-COMPANY_ADDRESS = "Chinmaya School Road, Thittamel, Chengannur, Alappuzha kerala India 689121"
+COMPANY_ADDRESS = "94/24,Chinmaya School Road, Thittamel, Chengannur, Alappuzha, Kerala India 689121"
+COMPANY_PHONE = "9447085673"
 COMPANY_EMAIL = "vaikharysolar@gmail.com"
 COMPANY_STATE = "Kerala"
 

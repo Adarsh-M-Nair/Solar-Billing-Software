@@ -70,7 +70,7 @@ const InvoicesList = () => {
                 invoices.map((inv) => (
                   <tr key={inv.id} className="table-row hover:bg-slate-50/50">
                     <td className="table-cell font-mono font-medium text-slate-800">{inv.invoice_number}</td>
-                    <td className="table-cell text-slate-500">{new Date(inv.date_issued).toLocaleDateString()}</td>
+                    <td className="table-cell text-slate-500">{new Date(inv.date_issued).toLocaleString()}</td>
                     <td className="table-cell">{inv.customer_details?.name || `Customer ID ${inv.customer}`}</td>
                     <td className="table-cell font-semibold text-slate-800">{Number(inv.grand_total).toFixed(2)}</td>
                     <td className="table-cell">

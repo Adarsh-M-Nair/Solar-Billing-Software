@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.conf import settings
+from django.utils import timezone
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from xhtml2pdf import pisa
@@ -35,7 +36,9 @@ class InvoiceViewSet(viewsets.ModelViewSet):
             'company_name': getattr(settings, 'COMPANY_NAME', 'Solar Co.'),
             'company_address': getattr(settings, 'COMPANY_ADDRESS', ''),
             'company_email': getattr(settings, 'COMPANY_EMAIL', ''),
-            'company_state': getattr(settings, 'COMPANY_STATE', '')
+            'company_phone': getattr(settings, 'COMPANY_PHONE', ''),
+            'company_state': getattr(settings, 'COMPANY_STATE', ''),
+            'generated_at': timezone.now()
         })
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = f'attachment; filename="Invoice_{invoice.invoice_number}.pdf"'
@@ -56,7 +59,9 @@ class QuotationViewSet(viewsets.ModelViewSet):
             'company_name': getattr(settings, 'COMPANY_NAME', 'Solar Co.'),
             'company_address': getattr(settings, 'COMPANY_ADDRESS', ''),
             'company_email': getattr(settings, 'COMPANY_EMAIL', ''),
-            'company_state': getattr(settings, 'COMPANY_STATE', '')
+            'company_phone': getattr(settings, 'COMPANY_PHONE', ''),
+            'company_state': getattr(settings, 'COMPANY_STATE', ''),
+            'generated_at': timezone.now()
         })
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = f'attachment; filename="Quotation_{quotation.quotation_number}.pdf"'

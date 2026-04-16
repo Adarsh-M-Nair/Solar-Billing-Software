@@ -157,11 +157,12 @@
     <table class="grid-table" style="border-bottom: none;">
         <tr>
             <td style="width: 55%; border-right: none; padding: 15px;">
-                <h1 class="company"><span class="large-v">V</span>aikhary Solar</h1>
+                <h1 class="company"><span class="large-v">V</span>AIKHARY SOLAR</h1>
                 <div class="mid-text" style="margin-top: 5px;">
                     {{ company_address }}<br>
                     State: {{ company_state }}<br>
-                    Email: {{ company_email }}
+                    Email: {{ company_email }}<br>
+                    Phone: {{ company_phone }}
                 </div>
             </td>
             <td style="width: 45%; border-left: none; padding: 15px; vertical-align: middle;">
@@ -181,8 +182,8 @@
             <td>: Due on Receipt</td>
         </tr>
         <tr>
-            <td class="font-bold">Due Date</td>
-            <td>: {{ invoice.date_issued|date:"d/m/Y" }}</td>
+            <td style="width: 25%; font-weight: bold;">Date</td>
+            <td>: {{ generated_at|date:"d/m/Y H:i" }}</td>
         </tr>
     </table>
 
@@ -200,7 +201,8 @@
                     India
                 </div>
                 {% if invoice.customer.phone_number %}
-                <div class="font-bold" style="font-size: 13px; margin-top: 8px;">Phone: {{ invoice.customer.phone_number }}</div>
+                <div class="font-bold" style="font-size: 13px; margin-top: 8px;">Phone: {{ invoice.customer.phone_number
+                    }}</div>
                 {% endif %}
             </td>
         </tr>

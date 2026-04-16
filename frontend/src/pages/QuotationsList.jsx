@@ -70,7 +70,7 @@ const QuotationsList = () => {
                 quotations.map((quot) => (
                   <tr key={quot.id} className="table-row hover:bg-slate-50/50">
                     <td className="table-cell font-mono font-medium text-slate-800">{quot.quotation_number}</td>
-                    <td className="table-cell text-slate-500">{new Date(quot.date_issued).toLocaleDateString()}</td>
+                    <td className="table-cell text-slate-500">{new Date(quot.date_issued).toLocaleString()}</td>
                     <td className="table-cell">{quot.customer_details?.name || `Customer ID ${quot.customer}`}</td>
                     <td className="table-cell font-semibold text-slate-800">{Number(quot.grand_total).toFixed(2)}</td>
                     <td className="table-cell">

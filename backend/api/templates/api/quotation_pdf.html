@@ -35,7 +35,7 @@
         .company-name {
             font-size: 32px;
             font-weight: normal;
-            color: #b91c1c;
+            color: #00cc00;
             font-style: italic;
             letter-spacing: -1px;
         }
@@ -235,11 +235,13 @@
         <table style="width: 100%;">
             <tr>
                 <td style="width: 75%; vertical-align: bottom;">
-                    <span class="company-name"><span class="large-v">V</span>aikhary</span> <span class="company-sub">SOLAR</span><br>
-                    <span class="tagline">Best Quality & Best Service</span>
+                    <span class="company-name"><span class="large-v">V</span>AIKHARY</span> <span
+                        class="company-sub"></span>
+                    SOLAR</span><br>
                     <div class="address">
                         {{ company_address }}<br>
-                        Email : {{ company_email }}
+                        Email : {{ company_email }}<br>
+                        Phone : {{ company_phone }}
                     </div>
                 </td>
             </tr>
@@ -249,7 +251,7 @@
 
     <div id="footer_content">
         <div style="border-top: 1px solid #000; padding-top: 5px; font-size: 10px; text-align: center;">
-            Thank you for choosing {{ company_name }}. Quotation Date: {{ quotation.date_issued|date:"d/m/Y" }}
+            Thank you for choosing {{ company_name }}. Quotation Date: {{ generated_at|date:"d/m/Y H:i" }}
         </div>
     </div>
 
@@ -258,8 +260,9 @@
     <table class="quotation-info">
         <tr>
             <td style="width: 60%; vertical-align: top;">
-                Quote To: <span style="text-decoration: underline;">{{ quotation.customer.name }}</span>
+                Quote To:
                 <div style="font-size: 13px; font-weight: normal; margin-top: 5px; line-height: 1.4;">
+                    <span style="text-decoration: underline;">{{ quotation.customer.name }}</span>
                     {{ quotation.customer.address }}<br>
                     {{ quotation.customer.state }}, India<br>
                     {% if quotation.customer.phone_number %}
@@ -267,7 +270,8 @@
                     {% endif %}
                 </div>
             </td>
-            <td style="width: 40%; text-align: right; vertical-align: top;">Quotation No: {{ quotation.quotation_number }}</td>
+            <td style="width: 40%; text-align: right; vertical-align: top;">Quotation No: {{ quotation.quotation_number
+                }}</td>
         </tr>
     </table>
 
