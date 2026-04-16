@@ -33,11 +33,16 @@
         }
 
         .company-name {
-            font-size: 38px;
-            font-weight: bold;
+            font-size: 32px;
+            font-weight: normal;
             color: #b91c1c;
             font-style: italic;
             letter-spacing: -1px;
+        }
+
+        .large-v {
+            font-size: 42px;
+            font-weight: bold;
         }
 
         .company-sub {
@@ -230,7 +235,7 @@
         <table style="width: 100%;">
             <tr>
                 <td style="width: 75%; vertical-align: bottom;">
-                    <span class="company-name">Vaikhary</span> <span class="company-sub">SOLAR</span><br>
+                    <span class="company-name"><span class="large-v">V</span>aikhary</span> <span class="company-sub">SOLAR</span><br>
                     <span class="tagline">Best Quality & Best Service</span>
                     <div class="address">
                         {{ company_address }}<br>
@@ -252,8 +257,17 @@
 
     <table class="quotation-info">
         <tr>
-            <td style="width: 60%;">Quote To: <span style="text-decoration: underline;">{{ quotation.customer.name }}</span></td>
-            <td style="width: 40%; text-align: right;">Quotation No: {{ quotation.quotation_number }}</td>
+            <td style="width: 60%; vertical-align: top;">
+                Quote To: <span style="text-decoration: underline;">{{ quotation.customer.name }}</span>
+                <div style="font-size: 13px; font-weight: normal; margin-top: 5px; line-height: 1.4;">
+                    {{ quotation.customer.address }}<br>
+                    {{ quotation.customer.state }}, India<br>
+                    {% if quotation.customer.phone_number %}
+                    Phone: {{ quotation.customer.phone_number }}
+                    {% endif %}
+                </div>
+            </td>
+            <td style="width: 40%; text-align: right; vertical-align: top;">Quotation No: {{ quotation.quotation_number }}</td>
         </tr>
     </table>
 

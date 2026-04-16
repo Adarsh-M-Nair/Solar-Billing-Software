@@ -49,8 +49,13 @@
         h1.company {
             margin: 0;
             font-size: 20px;
-            font-weight: bold;
+            font-weight: normal;
             color: #000;
+        }
+
+        .large-v {
+            font-size: 28px;
+            font-weight: bold;
         }
 
         h1.tax-invoice {
@@ -152,7 +157,7 @@
     <table class="grid-table" style="border-bottom: none;">
         <tr>
             <td style="width: 55%; border-right: none; padding: 15px;">
-                <h1 class="company">{{ company_name }}</h1>
+                <h1 class="company"><span class="large-v">V</span>aikhary Solar</h1>
                 <div class="mid-text" style="margin-top: 5px;">
                     {{ company_address }}<br>
                     State: {{ company_state }}<br>
