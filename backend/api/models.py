@@ -69,6 +69,9 @@ class Quotation(models.Model):
     date_issued = models.DateTimeField(auto_now_add=True)
     subtotal = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     tax_total = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    cgst_total = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    sgst_total = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    igst_total = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     grand_total = models.DecimalField(max_digits=12, decimal_places=2, default=0)
 
     def __str__(self):
@@ -79,4 +82,15 @@ class QuotationItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
     unit_price = models.DecimalField(max_digits=12, decimal_places=2)
+    cgst = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    sgst = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    igst = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     total_amount = models.DecimalField(max_digits=12, decimal_places=2)
+
+    @property
+    def cgst_rate(self):
+        return self.product.gst_rate / 2
+
+    @property
+    def sgst_rate(self):
+        return self.product.gst_rate / 2

@@ -35,7 +35,7 @@
         .company-name {
             font-size: 32px;
             font-weight: normal;
-            color: #00cc00;
+            color: #16a34a;
             font-style: italic;
             letter-spacing: -1px;
         }
@@ -48,7 +48,7 @@
         .company-sub {
             font-size: 22px;
             font-weight: bold;
-            color: #b91c1c;
+            color: #16a34a;
         }
 
         .tagline {
@@ -93,7 +93,7 @@
         }
 
         .red-divider {
-            background-color: #ef4444;
+            background-color: #16a34a;
             color: #fff;
             text-align: right;
             font-style: italic;
@@ -173,13 +173,13 @@
 
         .subsidy-title-left {
             text-decoration: underline;
-            color: #b91c1c;
+            color: #16a34a;
         }
 
         .subsidy-text {
             font-size: 14px;
             line-height: 1.6;
-            color: #b91c1c;
+            color: #16a34a;
             font-weight: bold;
         }
 
@@ -235,13 +235,11 @@
         <table style="width: 100%;">
             <tr>
                 <td style="width: 75%; vertical-align: bottom;">
-                    <span class="company-name"><span class="large-v">V</span>AIKHARY</span> <span
-                        class="company-sub"></span>
-                    SOLAR</span><br>
+                    <span class="company-name"><span class="large-v">V</span>AIKHARY <span class="company-sub">SOLAR</span></span><br>
                     <div class="address">
                         {{ company_address }}<br>
-                        Email : {{ company_email }}<br>
-                        Phone : {{ company_phone }}
+                        Email: {{ company_email }}<br>
+                        Phone: {{ company_phone }}
                     </div>
                 </td>
             </tr>
@@ -262,7 +260,7 @@
             <td style="width: 60%; vertical-align: top;">
                 Quote To:
                 <div style="font-size: 13px; font-weight: normal; margin-top: 5px; line-height: 1.4;">
-                    <span style="text-decoration: underline;">{{ quotation.customer.name }}</span>
+                    <div style="font-weight: bold; text-decoration: underline; font-size: 15px; margin-bottom: 2px;">{{ quotation.customer.name }}</div>
                     {{ quotation.customer.address }}<br>
                     {{ quotation.customer.state }}, India<br>
                     {% if quotation.customer.phone_number %}
@@ -270,8 +268,10 @@
                     {% endif %}
                 </div>
             </td>
-            <td style="width: 40%; text-align: right; vertical-align: top;">Quotation No: {{ quotation.quotation_number
-                }}</td>
+            <td style="width: 40%; text-align: right; vertical-align: top;">
+                Quotation No: {{ quotation.quotation_number }}<br>
+                Quotation Date: {{ quotation.date_issued|date:"d/m/Y" }}
+            </td>
         </tr>
     </table>
 
@@ -280,9 +280,19 @@
     <table class="items-table">
         <thead>
             <tr>
-                <th>SL No</th>
-                <th>ITEM</th>
-                <th>PRICE (Rs.)</th>
+                <th rowspan="2" style="width: 5%;">SL No</th>
+                <th rowspan="2" style="width: 35%;">ITEM</th>
+                <th rowspan="2" style="width: 8%;">Qty</th>
+                <th rowspan="2" style="width: 12%;">Rate</th>
+                <th colspan="2" style="width: 15%;">CGST</th>
+                <th colspan="2" style="width: 15%;">SGST</th>
+                <th rowspan="2" style="width: 10%;">Amount</th>
+            </tr>
+            <tr>
+                <th style="width: 5%;">%</th>
+                <th style="width: 10%;">Amt</th>
+                <th style="width: 5%;">%</th>
+                <th style="width: 10%;">Amt</th>
             </tr>
         </thead>
         <tbody>
@@ -292,16 +302,43 @@
                 <td class="item-desc">
                     {{ item.product.name }}
                     {% if item.product.description %}
-                    <br><span style="font-size: 13px; color: #555;">{{ item.product.description }}</span>
+                    <br><span style="font-size: 11px; color: #555;">{{ item.product.description }}</span>
                     {% endif %}
                 </td>
+                <td style="text-align: center;">{{ item.quantity }}</td>
+                <td style="text-align: right;">{{ item.unit_price }}</td>
+                
+                <td style="text-align: center;">{% if quotation.igst_total > 0 %}-{% else %}{{ item.cgst_rate }}%{% endif %}</td>
+                <td style="text-align: right;">{% if quotation.igst_total > 0 %}0.00{% else %}{{ item.cgst }}{% endif %}</td>
+                <td style="text-align: center;">{% if quotation.igst_total > 0 %}-{% else %}{{ item.sgst_rate }}%{% endif %}</td>
+                <td style="text-align: right;">{% if quotation.igst_total > 0 %}0.00{% else %}{{ item.sgst }}{% endif %}</td>
+                
                 <td class="price">{{ item.total_amount }}</td>
             </tr>
             {% endfor %}
             <tr>
-                <td colspan="2" style="text-align: right; font-weight: bold; font-size: 18px; padding: 15px;">TOTAL
-                    AMOUNT (Inc. Taxes)</td>
-                <td class="price" style="font-size: 20px;">{{ quotation.grand_total }}</td>
+                <td colspan="4" style="text-align: right; font-weight: bold; font-size: 14px; padding: 10px;">Sub Total</td>
+                <td colspan="5" class="price" style="font-size: 14px; text-align: right;">{{ quotation.subtotal }}</td>
+            </tr>
+            {% if quotation.cgst_total > 0 %}
+            <tr>
+                <td colspan="4" style="text-align: right; font-weight: bold; font-size: 14px; padding: 10px;">CGST Total</td>
+                <td colspan="5" class="price" style="font-size: 14px; text-align: right;">{{ quotation.cgst_total }}</td>
+            </tr>
+            <tr>
+                <td colspan="4" style="text-align: right; font-weight: bold; font-size: 14px; padding: 10px;">SGST Total</td>
+                <td colspan="5" class="price" style="font-size: 14px; text-align: right;">{{ quotation.sgst_total }}</td>
+            </tr>
+            {% endif %}
+            {% if quotation.igst_total > 0 %}
+            <tr>
+                <td colspan="4" style="text-align: right; font-weight: bold; font-size: 14px; padding: 10px;">IGST Total</td>
+                <td colspan="5" class="price" style="font-size: 14px; text-align: right;">{{ quotation.igst_total }}</td>
+            </tr>
+            {% endif %}
+            <tr>
+                <td colspan="4" style="text-align: right; font-weight: bold; font-size: 18px; padding: 15px;">TOTAL AMOUNT (Inc. Taxes)</td>
+                <td colspan="5" class="price" style="font-size: 20px; text-align: right;">{{ quotation.grand_total }}</td>
             </tr>
         </tbody>
     </table>

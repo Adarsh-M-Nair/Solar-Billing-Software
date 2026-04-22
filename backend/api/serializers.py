@@ -124,8 +124,8 @@ class QuotationItemSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = QuotationItem
-        fields = ['id', 'product', 'product_details', 'quantity', 'unit_price', 'total_amount']
-        read_only_fields = ['total_amount']
+        fields = ['id', 'product', 'product_details', 'quantity', 'unit_price', 'cgst', 'sgst', 'igst', 'total_amount']
+        read_only_fields = ['cgst', 'sgst', 'igst', 'total_amount']
 
 class QuotationSerializer(serializers.ModelSerializer):
     items = QuotationItemSerializer(many=True)
@@ -133,17 +133,28 @@ class QuotationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Quotation
-        fields = ['id', 'quotation_number', 'customer', 'customer_details', 'date_issued', 'subtotal', 'tax_total', 'grand_total', 'items']
-        read_only_fields = ['quotation_number', 'subtotal', 'tax_total', 'grand_total']
+        fields = ['id', 'quotation_number', 'customer', 'customer_details', 'date_issued', 'subtotal', 'tax_total', 'cgst_total', 'sgst_total', 'igst_total', 'grand_total', 'items']
+        read_only_fields = ['quotation_number', 'subtotal', 'tax_total', 'cgst_total', 'sgst_total', 'igst_total', 'grand_total']
 
     def create(self, validated_data):
         items_data = validated_data.pop('items')
+        customer = validated_data['customer']
+        
+        # Generate Quotation Number
         quotation_number = f"QT-{datetime.now().year}-{str(uuid.uuid4())[:6].upper()}"
         
+        # Is Interstate?
+        company_state = getattr(settings, 'COMPANY_STATE', '').strip().lower()
+        customer_state = customer.state.strip().lower()
+        is_interstate = company_state != customer_state
+
         quotation = Quotation.objects.create(quotation_number=quotation_number, **validated_data)
 
         subtotal = 0
         tax_total = 0
+        cgst_total = 0
+        sgst_total = 0
+        igst_total = 0
         grand_total = 0
 
         for item_data in items_data:
@@ -157,24 +168,43 @@ class QuotationSerializer(serializers.ModelSerializer):
             line_subtotal = line_total / (1 + gst_rate / 100)
             line_tax = line_total - line_subtotal
             
-            # Base unit price
+            # Base unit price for the "Rate" column
             unit_price_base = line_subtotal / quantity
             
+            line_cgst = 0
+            line_sgst = 0
+            line_igst = 0
+            
+            if is_interstate:
+                line_igst = line_tax
+            else:
+                line_cgst = line_tax / 2
+                line_sgst = line_tax / 2
+                
             QuotationItem.objects.create(
                 quotation=quotation,
                 product=product,
                 quantity=quantity,
                 unit_price=unit_price_base,
+                cgst=line_cgst,
+                sgst=line_sgst,
+                igst=line_igst,
                 total_amount=line_total
             )
             
             subtotal += line_subtotal
             tax_total += line_tax
+            cgst_total += line_cgst
+            sgst_total += line_sgst
+            igst_total += line_igst
             grand_total += line_total
 
         # Update totals
         quotation.subtotal = subtotal
         quotation.tax_total = tax_total
+        quotation.cgst_total = cgst_total
+        quotation.sgst_total = sgst_total
+        quotation.igst_total = igst_total
         quotation.grand_total = grand_total
         quotation.save()
 
