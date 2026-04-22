@@ -53,19 +53,25 @@ class QuotationViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['get'])
     def download_pdf(self, request, pk=None):
-        quotation = self.get_object()
-        html_string = render_to_string('api/quotation_pdf.html', {
-            'quotation': quotation,
-            'company_name': getattr(settings, 'COMPANY_NAME', 'Solar Co.'),
-            'company_address': getattr(settings, 'COMPANY_ADDRESS', ''),
-            'company_email': getattr(settings, 'COMPANY_EMAIL', ''),
-            'company_phone': getattr(settings, 'COMPANY_PHONE', ''),
-            'company_state': getattr(settings, 'COMPANY_STATE', ''),
-            'generated_at': timezone.now()
-        })
-        response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = f'attachment; filename="Quotation_{quotation.quotation_number}.pdf"'
-        pisa_status = pisa.CreatePDF(html_string, dest=response)
-        if pisa_status.err:
-            return HttpResponse('Error generating PDF', status=500)
-        return response
+        try:
+            quotation = self.get_object()
+            html_string = render_to_string('api/quotation_pdf.html', {
+                'quotation': quotation,
+                'company_name': getattr(settings, 'COMPANY_NAME', 'Solar Co.'),
+                'company_address': getattr(settings, 'COMPANY_ADDRESS', ''),
+                'company_email': getattr(settings, 'COMPANY_EMAIL', ''),
+                'company_phone': getattr(settings, 'COMPANY_PHONE', ''),
+                'company_state': getattr(settings, 'COMPANY_STATE', ''),
+                'generated_at': timezone.now()
+            })
+            response = HttpResponse(content_type='application/pdf')
+            response['Content-Disposition'] = f'attachment; filename="Quotation_{quotation.quotation_number}.pdf"'
+            
+            pisa_status = pisa.CreatePDF(html_string, dest=response)
+            if pisa_status.err:
+                return HttpResponse(f'Pisa Error: {pisa_status.err}', status=500)
+            return response
+        except Exception as e:
+            import traceback
+            error_msg = f"Error: {str(e)}\n\n{traceback.format_exc()}"
+            return HttpResponse(error_msg, content_type="text/plain", status=500)
