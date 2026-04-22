@@ -73,5 +73,7 @@ class QuotationViewSet(viewsets.ModelViewSet):
             return response
         except Exception as e:
             import traceback
-            error_msg = f"Error: {str(e)}\n\n{traceback.format_exc()}"
-            return HttpResponse(error_msg, content_type="text/plain", status=500)
+            error_msg = f"DIAGNOSTIC ERROR REPORT:\nError: {str(e)}\n\n{traceback.format_exc()}"
+            # Returning 200 instead of 500 so the frontend doesn't immediately 
+            # trigger its generic 'Error' alert, allowing us to see the body.
+            return HttpResponse(error_msg, content_type="text/plain", status=200)
