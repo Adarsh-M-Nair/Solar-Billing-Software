@@ -53,27 +53,19 @@ class QuotationViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['get'])
     def download_pdf(self, request, pk=None):
-        try:
-            quotation = self.get_object()
-            html_string = render_to_string('api/quotation_pdf.html', {
-                'quotation': quotation,
-                'company_name': getattr(settings, 'COMPANY_NAME', 'Solar Co.'),
-                'company_address': getattr(settings, 'COMPANY_ADDRESS', ''),
-                'company_email': getattr(settings, 'COMPANY_EMAIL', ''),
-                'company_phone': getattr(settings, 'COMPANY_PHONE', ''),
-                'company_state': getattr(settings, 'COMPANY_STATE', ''),
-                'generated_at': timezone.now()
-            })
-            response = HttpResponse(content_type='application/pdf')
-            response['Content-Disposition'] = f'attachment; filename="Quotation_{quotation.quotation_number}.pdf"'
-            
-            pisa_status = pisa.CreatePDF(html_string, dest=response)
-            if pisa_status.err:
-                return HttpResponse(f'Pisa Error: {pisa_status.err}', status=500)
-            return response
-        except Exception as e:
-            import traceback
-            error_msg = f"DIAGNOSTIC ERROR REPORT:\nError: {str(e)}\n\n{traceback.format_exc()}"
-            # Returning 200 instead of 500 so the frontend doesn't immediately 
-            # trigger its generic 'Error' alert, allowing us to see the body.
-            return HttpResponse(error_msg, content_type="text/plain", status=200)
+        quotation = self.get_object()
+        html_string = render_to_string('api/quotation_pdf.html', {
+            'quotation': quotation,
+            'company_name': getattr(settings, 'COMPANY_NAME', 'Solar Co.'),
+            'company_address': getattr(settings, 'COMPANY_ADDRESS', ''),
+            'company_email': getattr(settings, 'COMPANY_EMAIL', ''),
+            'company_phone': getattr(settings, 'COMPANY_PHONE', ''),
+            'company_state': getattr(settings, 'COMPANY_STATE', ''),
+            'generated_at': timezone.now()
+        })
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="Quotation_{quotation.quotation_number}.pdf"'
+        pisa_status = pisa.CreatePDF(html_string, dest=response)
+        if pisa_status.err:
+            return HttpResponse('Error generating PDF', status=500)
+        return response
